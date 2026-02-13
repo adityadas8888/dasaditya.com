@@ -1,4 +1,5 @@
 export const DATA = {
+    // Last Updated: 2026-02-13T15:47:00 (Sync Trigger)
     name: "Aditya Das",
     role: "Senior Software Engineer",
     bio: "Senior Full-Stack AI Engineer with 8+ years of experience building scalable distributed systems, high-performance web applications, and agentic AI tools. Passionate about LLMs, RAG, and the intersection of AI and productivity.",
