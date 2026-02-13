@@ -1,0 +1,60 @@
+export const DATA = {
+    name: "Aditya Das",
+    role: "Senior Software Engineer",
+    bio: "Senior Full-Stack AI Engineer with 8+ years of experience building scalable distributed systems, high-performance web applications, and agentic AI tools. Passionate about LLMs, RAG, and the intersection of AI and productivity.",
+    experience: [
+        {
+            company: "Tech Giant Corp",
+            role: "Senior Software Engineer",
+            period: "2021 - Present",
+            description: "Leading the AI platform team, focusing on agentic workflows and large-scale data processing.",
+        },
+        {
+            company: "Startup Disruptors",
+            role: "Full Stack Engineer",
+            period: "2018 - 2021",
+            description: "Scaled the core product from 10k to 1M+ active users. Implemented real-time collaboration features.",
+        },
+    ],
+    projects: [
+        {
+            title: "Agentic Workflow Engine",
+            description: "A framework for building and deploying multi-agent AI systems with built-in observability.",
+            tech: ["Next.js", "Python", "LangGraph", "PostgreSQL"],
+            link: "https://example.com/agentic",
+            image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800",
+        },
+        {
+            title: "Distributed Media Pipeline",
+            description: "High-performance video processing pipeline with automated captioning and metadata extraction.",
+            tech: ["Go", "Redis", "Celery", "Python"],
+            link: "https://example.com/pipeline",
+            image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800",
+        },
+        {
+            title: "Portfolio 2.0",
+            description: "Personal portfolio with gated AI-driven insights for recruiters.",
+            tech: ["Next.js", "Tailwind", "Framer Motion", "Vercel AI SDK"],
+            link: "https://dasaditya.com",
+            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
+        },
+    ],
+    skills: [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "Node.js",
+        "Python",
+        "PyTorch",
+        "LLMs",
+        "PostgreSQL",
+        "Redis",
+        "Docker",
+        "AWS",
+    ],
+    contact: {
+        email: "aditya@example.com",
+        linkedin: "https://linkedin.com/in/adityadas",
+        github: "https://github.com/adityadas",
+    },
+};
