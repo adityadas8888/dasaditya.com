@@ -1,18 +1,18 @@
 export const DATA = {
     // Last Updated: 2026-02-13T15:47:00 (Sync Trigger)
     name: "Aditya Das",
-    role: "Senior Software Engineer",
-    bio: "Senior Full-Stack AI Engineer with 8+ years of experience building scalable distributed systems, high-performance web applications, and agentic AI tools. Passionate about LLMs, RAG, and the intersection of AI and productivity.",
+    role: "Senior ML Engineer",
+    bio: "Senior Full-Stack ML Engineer with 8+ years of experience building scalable distributed systems, high-performance web applications, and agentic AI tools. Passionate about LLMs, RAG, and the intersection of AI and productivity.",
     experience: [
         {
             company: "Tech Giant Corp",
-            role: "Senior Software Engineer",
+            role: "Senior ML Engineer",
             period: "2021 - Present",
             description: "Leading the AI platform team, focusing on agentic workflows and large-scale data processing.",
         },
         {
             company: "Startup Disruptors",
-            role: "Full Stack Engineer",
+            role: "ML Engineer",
             period: "2018 - 2021",
             description: "Scaled the core product from 10k to 1M+ active users. Implemented real-time collaboration features.",
         },
