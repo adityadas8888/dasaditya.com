@@ -41,23 +41,16 @@ const SLIME_LEVEL = 14; /* remaining slime height when open */
  * Starts horizontal (y ≈ 0) then curves up (y goes negative).
  * Sizes taper from fat base to thin tip.
  */
-const STREAM_SIZE = SLIME_LEVEL - 4; /* 10px — goo blur expands to ~14px, matching level */
+const STREAM_SIZE = SLIME_LEVEL - 4; /* 8px — goo blur expands to ~12px, matching level */
 
-/*
- * 50 blobs along a smooth parametric curve.
- * First 70%: full size, full opacity.
- * Last 30%: dramatic size taper + fade to invisible.
- */
+/* 200 uniform blobs along smooth curve, starting past pill edge */
 const STREAM_COUNT = 200;
 const STREAM = Array.from({ length: STREAM_COUNT }, (_, i) => {
     const t = i / (STREAM_COUNT - 1);
-    const sizeTaperT = t < 0.7 ? 0 : (t - 0.7) / 0.3;
     return {
         x: Math.round(48 * t),
         y: Math.round(-70 * Math.pow(t, 1.5)),
-        size: t < 0.7
-            ? STREAM_SIZE
-            : Math.max(2, Math.round(STREAM_SIZE * (1 - sizeTaperT * 0.85))),
+        size: STREAM_SIZE,
     };
 });
 
@@ -256,6 +249,7 @@ export function ContactButton() {
                     left: 0,
                     zIndex: 0,
                     background: isDark ? "transparent" : "#d1d5db",
+                    clipPath: "inset(0 round 9999px)",
                 }}
                 onClick={() => setIsOpen((o) => !o)}
             >
@@ -266,11 +260,10 @@ export function ContactButton() {
                         left: 0,
                         bottom: 0,
                         background: SLIME,
-                        borderRadius: 9999,
                     }}
                     initial={false}
                     animate={{
-                        height: isOpen ? SLIME_LEVEL : PILL_H - 4,
+                        height: isOpen ? SLIME_LEVEL : PILL_H,
                     }}
                     transition={{
                         type: "spring",
@@ -280,51 +273,21 @@ export function ContactButton() {
                 />
             </div>
 
-            {/* ── EYES (z-0) ── */}
-            <div
+            {/* ── EYES (z-1) ── */}
+            <motion.div
                 className="absolute flex items-center justify-center gap-[3px] pointer-events-none"
                 style={{
                     bottom: PILL_H / 2 - 11,
                     left: CX - 24,
                     zIndex: 1,
                 }}
+                initial={false}
+                animate={{ opacity: isOpen ? 1 : 0 }}
+                transition={{ duration: 0.2 }}
             >
                 <Eye id="L" />
                 <Eye id="R" />
-            </div>
-
-            {/* ── COVER BLOB (z-[1.5]) — outside goo filter for exact fit ── */}
-            <motion.div
-                className="absolute cursor-pointer"
-                style={{
-                    borderRadius: 9999,
-                    background: SLIME,
-                    zIndex: 2,
-                }}
-                onClick={() => setIsOpen((o) => !o)}
-                initial={false}
-                animate={
-                    isOpen
-                        ? {
-                            width: 16,
-                            height: 12,
-                            bottom: 2,
-                            left: streamAnchorX - 8,
-                        }
-                        : {
-                            /* Exact pill size — no goo filter so no blur */
-                            width: PILL_W,
-                            height: PILL_H,
-                            bottom: 0,
-                            left: 0,
-                        }
-                }
-                transition={{
-                    type: "spring",
-                    stiffness: isOpen ? 80 : 140,
-                    damping: 16,
-                }}
-            />
+            </motion.div>
 
             {/* ── GOO LAYER (z-3) — stream + menu only ── */}
             <div
@@ -339,11 +302,7 @@ export function ContactButton() {
                 }}
             >
 
-                {/*
-         * STREAM — curved blob chain from slime level
-         * outward. Uses streamAnchor so it exits from the
-         * slime surface at the pill wall.
-         */}
+                {/* STREAM — blob chain, uniform size for smooth goo merge */}
                 {STREAM.map((blob, i) => (
                     <motion.div
                         key={`s${i}`}
