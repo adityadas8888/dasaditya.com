@@ -41,7 +41,7 @@ const SLIME_LEVEL = 14; /* remaining slime height when open */
  * Starts horizontal (y ≈ 0) then curves up (y goes negative).
  * Sizes taper from fat base to thin tip.
  */
-const STREAM_SIZE = SLIME_LEVEL - 2; /* 12px — matches slime level */
+const STREAM_SIZE = SLIME_LEVEL - 4; /* 10px — goo blur expands to ~14px, matching level */
 
 /*
  * 50 blobs along a smooth parametric curve.
@@ -293,7 +293,40 @@ export function ContactButton() {
                 <Eye id="R" />
             </div>
 
-            {/* ── GOO LAYER (z-2) — cover + stream + menu ── */}
+            {/* ── COVER BLOB (z-[1.5]) — outside goo filter for exact fit ── */}
+            <motion.div
+                className="absolute cursor-pointer"
+                style={{
+                    borderRadius: 9999,
+                    background: SLIME,
+                    zIndex: 2,
+                }}
+                onClick={() => setIsOpen((o) => !o)}
+                initial={false}
+                animate={
+                    isOpen
+                        ? {
+                            width: 16,
+                            height: 12,
+                            bottom: 2,
+                            left: streamAnchorX - 8,
+                        }
+                        : {
+                            /* Exact pill size — no goo filter so no blur */
+                            width: PILL_W,
+                            height: PILL_H,
+                            bottom: 0,
+                            left: 0,
+                        }
+                }
+                transition={{
+                    type: "spring",
+                    stiffness: isOpen ? 80 : 140,
+                    damping: 16,
+                }}
+            />
+
+            {/* ── GOO LAYER (z-3) — stream + menu only ── */}
             <div
                 className="absolute"
                 style={{
@@ -302,53 +335,9 @@ export function ContactButton() {
                     width: 310,
                     height: 220,
                     filter: "url(#goo)",
-                    zIndex: 2,
+                    zIndex: 3,
                 }}
             >
-                {/*
-         * COVER BLOB — hides eyes when closed.
-         * When open: moves to the slime surface level at the
-         * pill's right edge — the "spill point." It overlaps
-         * the pill edge so that the goo-filtered stream
-         * appears to emerge from the slime surface inside.
-         */}
-                <motion.div
-                    className="absolute cursor-pointer"
-                    style={{
-                        borderRadius: 9999,
-                        background: SLIME,
-                    }}
-                    onClick={() => setIsOpen((o) => !o)}
-                    initial={false}
-                    animate={
-                        isOpen
-                            ? {
-                                /*
-                                 * Positioned at slime level, overlapping
-                                 * the pill's right wall. The left half
-                                 * hides behind the pill border (z-3),
-                                 * the right half sticks out and merges
-                                 * with the first stream blob via goo.
-                                 */
-                                width: 16,
-                                height: 12,
-                                bottom: 2,
-                                left: streamAnchorX - 8,
-                            }
-                            : {
-                                /* Full pill — covers eyes */
-                                width: PILL_W,
-                                height: PILL_H,
-                                bottom: 0,
-                                left: 0,
-                            }
-                    }
-                    transition={{
-                        type: "spring",
-                        stiffness: isOpen ? 80 : 140,
-                        damping: 16,
-                    }}
-                />
 
                 {/*
          * STREAM — curved blob chain from slime level
@@ -483,7 +472,7 @@ export function ContactButton() {
                     border: `2px solid ${borderColor}`,
                     bottom: 0,
                     left: 0,
-                    zIndex: 3,
+                    zIndex: 4,
                     background: "transparent",
                 }}
             />
@@ -496,7 +485,7 @@ export function ContactButton() {
                     left: 0,
                     width: PILL_W,
                     height: PILL_H,
-                    zIndex: 4,
+                    zIndex: 5,
                 }}
                 onClick={() => setIsOpen((o) => !o)}
                 animate={{

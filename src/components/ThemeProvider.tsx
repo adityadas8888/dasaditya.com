@@ -8,6 +8,7 @@ interface ThemeContextType {
     theme: Theme;
     actualTheme: "light" | "dark";
     setTheme: (theme: Theme) => void;
+    mounted: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -47,16 +48,23 @@ function calculateThemeState(theme: Theme) {
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-    const [theme, setThemeState] = useState<Theme>(() => {
-        if (typeof window !== "undefined") {
-            return (localStorage.getItem("portfolio-theme") as Theme) || "auto";
-        }
-        return "auto";
-    });
+    const [mounted, setMounted] = useState(false);
+    const [theme, setThemeState] = useState<Theme>("auto");
 
-    const { targetTheme, sunsetFactor } = useMemo(() => calculateThemeState(theme), [theme]);
+    // After mount, read from localStorage
+    useEffect(() => {
+        const stored = localStorage.getItem("portfolio-theme") as Theme | null;
+        if (stored) setThemeState(stored);
+        setMounted(true);
+    }, []);
+
+    const { targetTheme, sunsetFactor } = useMemo(
+        () => (mounted ? calculateThemeState(theme) : { targetTheme: "dark" as const, sunsetFactor: -1 }),
+        [theme, mounted]
+    );
 
     useEffect(() => {
+        if (!mounted) return;
         const html = document.documentElement;
         html.setAttribute("data-theme", targetTheme);
 
@@ -74,7 +82,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         } else {
             html.style.removeProperty("--background");
         }
-    }, [targetTheme, sunsetFactor]);
+    }, [targetTheme, sunsetFactor, mounted]);
 
     const [tick, setTick] = useState(0);
     useEffect(() => {
@@ -87,16 +95,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         localStorage.setItem("portfolio-theme", newTheme);
     }, []);
 
-    const currentThemeState = useMemo(() => calculateThemeState(theme),
+    const currentThemeState = useMemo(() =>
+        mounted ? calculateThemeState(theme) : { targetTheme: "dark" as const, sunsetFactor: -1 },
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [theme, tick]
+        [theme, tick, mounted]
     );
 
     return (
         <ThemeContext.Provider value={{
             theme,
             actualTheme: currentThemeState.targetTheme,
-            setTheme
+            setTheme,
+            mounted,
         }}>
             {children}
         </ThemeContext.Provider>
