@@ -43,14 +43,31 @@ const SLIME_LEVEL = 14; /* remaining slime height when open */
  */
 const STREAM_SIZE = SLIME_LEVEL - 4; /* 8px — goo blur expands to ~12px, matching level */
 
-/* 200 uniform blobs along smooth curve, starting past pill edge */
+/* 200 blobs along smooth curve, with conical expansion and color transition at the tip */
 const STREAM_COUNT = 200;
 const STREAM = Array.from({ length: STREAM_COUNT }, (_, i) => {
     const t = i / (STREAM_COUNT - 1);
+
+    // Elegant conical fan: scale up to 3.5x at the very tip
+    const isTip = t > 0.8;
+    const fanStrength = isTip ? (t - 0.8) / 0.2 : 0;
+    const sizeScale = 1 + fanStrength * 2.5;
+
+    // Color Interp: SLIME (#55263b) to GitHub (#24292e)
+    let color = SLIME;
+    if (t > 0.6) {
+        const factor = (t - 0.6) / 0.4;
+        const r = Math.round(85 + (36 - 85) * factor);
+        const g = Math.round(38 + (41 - 38) * factor);
+        const b = Math.round(59 + (46 - 59) * factor);
+        color = `rgb(${r}, ${g}, ${b})`;
+    }
+
     return {
-        x: 48 * t,
+        x: 52 * t,
         y: -70 * Math.pow(t, 1.5),
-        size: STREAM_SIZE,
+        size: STREAM_SIZE * sizeScale,
+        color,
     };
 });
 
@@ -310,7 +327,7 @@ export function ContactButton() {
                         style={{
                             width: blob.size,
                             height: blob.size,
-                            background: SLIME,
+                            background: blob.color,
                             left: streamAnchorX - blob.size / 2,
                             bottom: streamAnchorBottom - blob.size / 2,
                             willChange: "transform",
@@ -322,9 +339,10 @@ export function ContactButton() {
                             scale: isOpen ? 1 : 0,
                         }}
                         transition={{
-                            ...HONEY_SPRING,
-                            stiffness: 110,
-                            delay: isOpen ? i * 0.001 : (STREAM_COUNT - 1 - i) * 0.0005,
+                            type: "spring",
+                            stiffness: 120,
+                            damping: 15,
+                            delay: isOpen ? i * 0.001 : (STREAM_COUNT - 1 - i) * 0.0004,
                         }}
                     />
                 ))}
@@ -362,11 +380,13 @@ export function ContactButton() {
                                 backgroundColor: isOpen ? contact.bg : SLIME,
                             }}
                             transition={{
-                                ...HONEY_SPRING,
-                                delay: isOpen ? 0 : (2 - i) * 0.03,
+                                type: "spring",
+                                stiffness: 120,
+                                damping: 15,
+                                delay: isOpen ? 0.2 + i * 0.05 : (2 - i) * 0.02,
                                 backgroundColor: {
                                     duration: 0.4,
-                                    delay: isOpen ? 0.15 + i * 0.06 : 0,
+                                    delay: isOpen ? 0.3 + i * 0.06 : 0,
                                     ease: "easeInOut",
                                 },
                             }}
@@ -413,8 +433,10 @@ export function ContactButton() {
                             }}
                             exit={{ x: 0, y: 0, scale: 0, opacity: 0 }}
                             transition={{
-                                ...HONEY_SPRING,
-                                delay: 0.1,
+                                type: "spring",
+                                stiffness: 120,
+                                damping: 15,
+                                delay: isOpen ? 0.25 : 0,
                             }}
                         >
                             <XIcon size={13} strokeWidth={2.5} />
