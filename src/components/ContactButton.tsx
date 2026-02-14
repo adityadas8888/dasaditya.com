@@ -48,8 +48,8 @@ const STREAM_COUNT = 200;
 const STREAM = Array.from({ length: STREAM_COUNT }, (_, i) => {
     const t = i / (STREAM_COUNT - 1);
     return {
-        x: Math.round(48 * t),
-        y: Math.round(-70 * Math.pow(t, 1.5)),
+        x: 48 * t,
+        y: -70 * Math.pow(t, 1.5),
         size: STREAM_SIZE,
     };
 });
@@ -216,7 +216,7 @@ export function ContactButton() {
             <svg className="absolute" style={{ width: 0, height: 0 }} aria-hidden>
                 <defs>
                     <filter id="goo">
-                        <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" />
+                        <feGaussianBlur in="SourceGraphic" stdDeviation="12.5" result="blur" />
                         <feColorMatrix
                             in="blur"
                             mode="matrix"
@@ -313,6 +313,7 @@ export function ContactButton() {
                             background: SLIME,
                             left: streamAnchorX - blob.size / 2,
                             bottom: streamAnchorBottom - blob.size / 2,
+                            willChange: "transform",
                         }}
                         initial={false}
                         animate={{
@@ -322,7 +323,8 @@ export function ContactButton() {
                         }}
                         transition={{
                             ...HONEY_SPRING,
-                            delay: 0,
+                            stiffness: 110,
+                            delay: isOpen ? i * 0.001 : (STREAM_COUNT - 1 - i) * 0.0005,
                         }}
                     />
                 ))}
