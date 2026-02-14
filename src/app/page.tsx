@@ -6,19 +6,35 @@ import { ProjectGrid } from "@/components/ProjectGrid";
 import { ChatInterface } from "@/components/ChatInterface";
 import { VerificationModal } from "@/components/VerificationModal";
 import { StagingBadge } from "@/components/StagingBadge";
+import { ContactButton } from "@/components/ContactButton";
 import { Suspense } from "react";
+import { useTheme } from "@/components/ThemeProvider";
+import { cn } from "@/lib/utils";
 
 function PortfolioContent() {
   const { isVerified, showModal, setShowModal, verify } = useAccessControl();
+  const { actualTheme } = useTheme();
 
   return (
-    <main className="min-h-screen bg-slate-950 text-slate-50 selection:bg-blue-500/30">
+    <main className="min-h-screen bg-background text-foreground selection:bg-primary/30 transition-colors duration-500">
       <StagingBadge />
 
       {/* Background patterns */}
       <div className="fixed inset-0 -z-50 overflow-hidden">
-        <div className="absolute top-0 left-0 h-full w-full bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-slate-950 to-slate-950" />
-        <div className="absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full bg-purple-900/10 blur-[120px]" />
+        <div
+          className={cn(
+            "absolute top-0 left-0 h-full w-full transition-opacity duration-700",
+            actualTheme === "dark"
+              ? "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-background to-background opacity-100"
+              : "bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-100/40 via-background to-background opacity-100"
+          )}
+        />
+        <div
+          className={cn(
+            "absolute bottom-0 right-0 h-[500px] w-[500px] rounded-full blur-[120px] transition-all duration-700",
+            actualTheme === "dark" ? "bg-purple-900/10" : "bg-blue-200/20"
+          )}
+        />
       </div>
 
       <Hero />
@@ -29,8 +45,8 @@ function PortfolioContent() {
         {/* Skills Section */}
         <section className="py-20">
           <div className="mb-12 flex flex-col items-center justify-center text-center">
-            <h2 className="text-3xl font-bold text-white sm:text-4xl">Technical Stack</h2>
-            <div className="mt-2 h-1.5 w-20 rounded-full bg-blue-600" />
+            <h2 className="text-3xl font-bold sm:text-4xl text-foreground">Technical Stack</h2>
+            <div className="mt-2 h-1.5 w-20 rounded-full bg-primary" />
           </div>
 
           <div className="flex flex-wrap justify-center gap-3">
@@ -41,7 +57,7 @@ function PortfolioContent() {
             ].map((skill) => (
               <span
                 key={skill}
-                className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-medium transition-all hover:border-blue-500/50 hover:bg-blue-500/10 hover:text-blue-400"
+                className="rounded-xl border border-border bg-card/10 px-6 py-3 text-sm font-medium transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
               >
                 {skill}
               </span>
@@ -50,11 +66,12 @@ function PortfolioContent() {
         </section>
 
         {/* Footer */}
-        <footer className="mt-20 border-t border-white/5 pt-10 text-center text-sm text-slate-500">
-          <p>© {new Date().getFullYear()} Aditya Das. Built with Next.js & AI.</p>
+        <footer className="mt-20 border-t border-border pt-10 text-center text-sm text-slate-500">
+          <p>© {new Date().getFullYear()} Aditya Das. Build with Next.js & AI.</p>
         </footer>
       </div>
 
+      <ContactButton />
       <ChatInterface isVerified={isVerified} />
 
       <VerificationModal
@@ -68,7 +85,7 @@ function PortfolioContent() {
 
 export default function Home() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-slate-950" />}>
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
       <PortfolioContent />
     </Suspense>
   );

@@ -54,8 +54,8 @@ export const DATA = {
         "AWS",
     ],
     contact: {
-        email: "aditya@example.com",
-        linkedin: "https://linkedin.com/in/adityadas",
-        github: "https://github.com/adityadas",
+        email: "aditya.das8.ad@gmail.com",
+        linkedin: "https://www.linkedin.com/in/aditya-das-02414862/",
+        github: "https://github.com/adityadas8888",
     },
 };
