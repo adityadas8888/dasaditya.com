@@ -18,6 +18,7 @@
   --card-foreground: 222 47% 11%;
   --border: 214 32% 91%;
   --primary: 221 83% 53%;
+  --primary-rgb: 37, 99, 235;
 }
 
 [data-theme='dark'] {
@@ -27,6 +28,7 @@
   --card-foreground: 210 40% 98%;
   --border: 217 33% 17%;
   --primary: 217 91% 60%;
+  --primary-rgb: 59, 130, 246;
 }
 
 @layer base {
@@ -55,6 +57,66 @@
 
     50% {
       background-position: 100% 50%
+    }
+  }
+
+  @keyframes silk-drift-1 {
+
+    0%,
+    100% {
+      transform: translate(0%, 0%) rotate(0deg);
+    }
+
+    25% {
+      transform: translate(8%, -5%) rotate(3deg);
+    }
+
+    50% {
+      transform: translate(-3%, 8%) rotate(-2deg);
+    }
+
+    75% {
+      transform: translate(-6%, -3%) rotate(4deg);
+    }
+  }
+
+  @keyframes silk-drift-2 {
+
+    0%,
+    100% {
+      transform: translate(0%, 0%) rotate(0deg);
+    }
+
+    25% {
+      transform: translate(-7%, 6%) rotate(-3deg);
+    }
+
+    50% {
+      transform: translate(5%, -4%) rotate(2deg);
+    }
+
+    75% {
+      transform: translate(3%, 7%) rotate(-4deg);
+    }
+  }
+
+  @keyframes silk-drift-3 {
+
+    0%,
+    100% {
+      transform: translate(0%, 0%) rotate(0deg);
+    }
+
+    25% {
+      transform: translate(5%, 5%) rotate(2deg);
+    }
+
+    50% {
+      transform: translate(-8%, -3%) rotate(-3deg);
+    }
+
+    75% {
+      transform: translate(4%, -6%) rotate(3deg);
     }
   }
 }

@@ -10,6 +10,9 @@ import { ContactButton } from "@/components/ContactButton";
 import { Suspense } from "react";
 import { useTheme } from "@/components/ThemeProvider";
 import { cn } from "@/lib/utils";
+import { SideNav } from "@/components/SideNav";
+import { JourneySection } from "@/components/JourneySection";
+import { GitHubPulse } from "@/components/GitHubPulse";
 
 function PortfolioContent() {
   const { isVerified, showModal, setShowModal, verify } = useAccessControl();
@@ -17,6 +20,7 @@ function PortfolioContent() {
 
   return (
     <main className="min-h-screen bg-background text-foreground selection:bg-primary/30 transition-colors duration-500">
+      <SideNav />
       <StagingBadge />
 
       {/* Background patterns */}
@@ -39,11 +43,28 @@ function PortfolioContent() {
 
       <Hero />
 
-      <div className="max-w-7xl mx-auto px-4 pb-20">
-        <ProjectGrid />
+      <div className="max-w-7xl mx-auto px-4 pb-20 space-y-32">
+        {/* Section 2: Journey */}
+        <JourneySection />
 
-        {/* Skills Section */}
-        <section className="py-20">
+        {/* Section 3: Activity / GitHub Pulse */}
+        <section id="activity" className="py-20 flex flex-col items-center justify-center">
+          <div className="mb-12 flex flex-col items-center justify-center text-center">
+            <h2 className="text-3xl font-bold sm:text-4xl text-foreground">Open Source Activity</h2>
+            <div className="mt-2 h-1.5 w-20 rounded-full bg-primary" />
+          </div>
+          <div className="w-full max-w-md">
+            <GitHubPulse />
+          </div>
+        </section>
+
+        {/* Section 4: Projects */}
+        <div id="projects">
+          <ProjectGrid />
+        </div>
+
+        {/* Section 5: Skills Section */}
+        <section id="stack" className="py-20">
           <div className="mb-12 flex flex-col items-center justify-center text-center">
             <h2 className="text-3xl font-bold sm:text-4xl text-foreground">Technical Stack</h2>
             <div className="mt-2 h-1.5 w-20 rounded-full bg-primary" />

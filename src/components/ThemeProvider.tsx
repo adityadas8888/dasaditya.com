@@ -22,7 +22,9 @@ function calculateThemeState(theme: Theme) {
     if (typeof window === "undefined") return { targetTheme: "dark" as const, sunsetFactor: -1 };
 
     const now = new Date();
-    const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+    const currentTimeMinutes = (typeof window !== "undefined" && (window as any).__portfolio_sim_time !== undefined)
+        ? (window as any).__portfolio_sim_time
+        : now.getHours() * 60 + now.getMinutes();
     const sunsetStart = 16 * 60;
     const sunsetEnd = 17 * 60;
 
